@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Fill-in Game for Kids</title>
+    <style>
+        .word-container {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .letter-container {
+            position: relative;
+            font-size: 24px;
+            text-align: center;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        input {
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            text-align: center;
+            border: 2px solid #4CAF50;
+            outline: none;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<h1 style="color: #4CAF50;">Fill in the Gaps</h1>
+
+<div id="questionContainer"></div>
+<button onclick="checkAnswers()">Done</button>
+<p id="result"></p>
+
+<script>
+    const wordsWithGaps = ["C_w", "C_T", "D_G"]; // Add more words as needed
+    const correctAnswers = ["cow", "cat", "dog"]; // Add correct answers for each word
+    let score = 0;
+
+    function generateQuestion() {
+        const questionContainer = document.getElementById("questionContainer");
+        questionContainer.innerHTML = "";
+
+        for (let i = 0; i < wordsWithGaps.length; i++) {
+            const wordContainer = document.createElement("div");
+            wordContainer.classList.add("word-container");
+
+            for (let j = 0; j < wordsWithGaps[i].length; j++) {
+                const letterContainer = document.createElement("div");
+                letterContainer.classList.add("letter-container");
+
+                if (wordsWithGaps[i][j] === '_') {
+                    const input = document.createElement("input");
+                    input.type = "text";
+                    input.maxLength = 1;
+                    letterContainer.appendChild(input);
+                } else {
+                    const fixedLetter = document.createTextNode(wordsWithGaps[i][j]);
+                    letterContainer.appendChild(fixedLetter);
+                }
+
+                wordContainer.appendChild(letterContainer);
+            }
+
+            questionContainer.appendChild(wordContainer);
+        }
+    }
+
+    function checkAnswers() {
+        const inputs = document.querySelectorAll("#questionContainer input");
+        for (let i = 0; i < inputs.length; i++) {
+            const userAnswer = inputs[i].value.trim().toLowerCase();
+            const expectedAnswer = correctAnswers[i].charAt(1);
+
+            if (userAnswer === expectedAnswer) {
+                score++;
+            }
+        }
+
+        const resultElement = document.getElementById("result");
+        resultElement.innerHTML = `<strong>Your score:</strong> ${score} out of ${wordsWithGaps.length}`;
+        resultElement.style.fontWeight = "bold";
+        score = 0; // Reset the score for potential replay
+    }
+
+    window.onload = generateQuestion;
+</script>
+
+</body>
+</html>
